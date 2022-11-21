@@ -15,6 +15,14 @@
     <None Remove="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <None Remove="Configurations\" />
     <None Remove="Microsoft.EntityFrameworkCore.Sqlite" />
+    <None Remove="Microsoft.EntityFrameworkCore.Design" />
+    <None Remove="Domain\Services\" />
+    <None Remove="Domain\Commands\" />
+    <None Remove="Domain\Commands\User\" />
+    <None Remove="Flunt" />
+    <None Remove="Domain\Contracts\" />
+    <None Remove="Infra\Repositories\" />
+    <None Remove="Domain\Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
@@ -23,9 +31,20 @@
     <Folder Include="Infra\" />
     <Folder Include="Infra\Contexts\" />
     <Folder Include="Configurations\" />
+    <Folder Include="Domain\Services\" />
+    <Folder Include="Domain\Commands\" />
+    <Folder Include="Domain\Commands\User\" />
+    <Folder Include="Domain\Contracts\" />
+    <Folder Include="Infra\Repositories\" />
+    <Folder Include="Domain\Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Flunt" Version="2.0.5" />
   </ItemGroup>
 </Project>
