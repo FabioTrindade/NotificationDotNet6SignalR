@@ -11,13 +11,24 @@ public class User : IdentityUser
         CreatedAt = DateTime.Now;
     }
 
+    public User(string firstName,
+        string lastName,
+        string userName,
+        string email)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        UserName = userName;
+        Email = email;
+    }
+
 
     // Properties
     [StringLength(maximumLength: 100, ErrorMessage = "O primeiro nome deve ter no máximo {0} caracteres.")]
     public string FirstName { get; private set; }
 
     [StringLength(maximumLength: 100, ErrorMessage = "O sobrenome deve ter no máximo {0} caracteres.")]
-    public string LastName { get; private set; }
+    public string LastName { get; private set; }    
 
     public DateTime CreatedAt { get; }
 

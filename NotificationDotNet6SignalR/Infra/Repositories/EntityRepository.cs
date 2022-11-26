@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using NotificationDotNet6SignalR.Domain.Abstracts;
 using NotificationDotNet6SignalR.Domain.Repositories;

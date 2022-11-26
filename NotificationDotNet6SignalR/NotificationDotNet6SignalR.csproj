@@ -23,6 +23,8 @@
     <None Remove="Domain\Contracts\" />
     <None Remove="Infra\Repositories\" />
     <None Remove="Domain\Repositories\" />
+    <None Remove="Hubs\" />
+    <None Remove="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
@@ -37,6 +39,8 @@
     <Folder Include="Domain\Contracts\" />
     <Folder Include="Infra\Repositories\" />
     <Folder Include="Domain\Repositories\" />
+    <Folder Include="Hubs\" />
+    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />

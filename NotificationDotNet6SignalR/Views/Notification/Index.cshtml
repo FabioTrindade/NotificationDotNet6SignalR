@@ -1,0 +1,30 @@
+﻿@model NotificationDotNet6SignalR.Models.Article
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>ViewData["Title"]</h1>
+
+@using (Html.BeginForm("Index", "Admin", FormMethod.Post, new { id = "Article" }))
+{
+    <div class="row">
+        <div class="col-6">
+            Article Heading
+        </div>
+        <div class="col-6">
+            <input type="text" id="articleHeading" name="articleHeading" />
+            @Html.TextBoxFor(model => Model.Heading, new { @maxlength = "50" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            Article Content
+        </div>
+        <div class="col-6">
+            @Html.TextBoxFor(model => Model.Content, new { @maxlength = "100" })
+        </div>
+    </div>
+    <div>
+        <button type="submit" id="Add" value="Add" />
+    </div>
+}

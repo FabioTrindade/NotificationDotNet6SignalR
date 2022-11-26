@@ -1,5 +1,10 @@
-﻿namespace NotificationDotNet6SignalR.Domain.Repositories;
+﻿using NotificationDotNet6SignalR.Domain.Commands.User;
+using NotificationDotNet6SignalR.Domain.Services;
 
-public interface IUserRepository
+namespace NotificationDotNet6SignalR.Domain.Repositories;
+
+public interface IUserRepository : IService<UserRegisterCommand>,
+    IService<UserLoginCommand>
 {
+    void Logout();
 }

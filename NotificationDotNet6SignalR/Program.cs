@@ -1,11 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NotificationDotNet6SignalR.Configurations;
+using NotificationDotNet6SignalR.Hubs;
 using NotificationDotNet6SignalR.Infra.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Hub
+builder.Services.AddSignalR();
 
 // Initialize database
 DataContextConfiguration.InitializeDatabase(builder);
@@ -40,6 +45,13 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapHub<NotificationHub>("/NotificationHub");
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapHub<NotificationHub>("/NotificationHub");
+//});
 
 app.MapControllerRoute(
     name: "default",
