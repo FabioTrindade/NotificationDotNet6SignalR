@@ -6,5 +6,5 @@ public class Article
 
     public string Content { get; set; }
 
-    public Guid userId { get; set; }
+    public string UserId { get; set; }
 }

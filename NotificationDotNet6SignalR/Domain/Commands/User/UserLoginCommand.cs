@@ -15,7 +15,7 @@ public class UserLoginCommand : Notifiable<Notification>, ICommand
     [DataType(DataType.Password)]
     public string Password { get; set; }
 
-    public string ReturnUrl { get; set; }
+    public string? ReturnUrl { get; set; }
 
     public void Validate()
     {

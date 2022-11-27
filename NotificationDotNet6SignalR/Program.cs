@@ -6,6 +6,9 @@ using NotificationDotNet6SignalR.Infra.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Context Accessor
+builder.Services.AddHttpContextAccessor();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -30,6 +33,11 @@ IdentityConfiguration.CookieTempDataProviderOptions(builder);
 // Cookie
 IdentityConfiguration.Cookie(builder);
 
+// Depency Injection - Service, Repository and provider
+DependencyInjectionConfiguration.SetConfigureScopedService(builder);
+DependencyInjectionConfiguration.SetConfigureScopedRepository(builder);
+DependencyInjectionConfiguration.SetConfigureScopedProvider(builder);
+
 var app = builder.Build();
 
 // Create database and execute migrations on start project
@@ -44,9 +52,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication();
 
-app.MapHub<NotificationHub>("/NotificationHub");
+app.UseAuthorization();
 
 //app.UseEndpoints(endpoints =>
 //{
@@ -56,5 +64,8 @@ app.MapHub<NotificationHub>("/NotificationHub");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<NotificationHub>("/NotificationHub");
+app.MapHub<NotificationHub>("/NotificationUserHub");
 
 app.Run();

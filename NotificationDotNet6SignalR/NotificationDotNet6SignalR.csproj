@@ -25,6 +25,10 @@
     <None Remove="Domain\Repositories\" />
     <None Remove="Hubs\" />
     <None Remove="Views\Notification\" />
+    <None Remove="Views\User\" />
+    <None Remove="Services\" />
+    <None Remove="Domain\Providers\" />
+    <None Remove="Providers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
@@ -41,6 +45,10 @@
     <Folder Include="Domain\Repositories\" />
     <Folder Include="Hubs\" />
     <Folder Include="Views\Notification\" />
+    <Folder Include="Views\User\" />
+    <Folder Include="Services\" />
+    <Folder Include="Domain\Providers\" />
+    <Folder Include="Providers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
@@ -50,5 +58,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Flunt" Version="2.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
