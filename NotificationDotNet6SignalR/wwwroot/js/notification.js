@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl(“/NotificationHub”).build();
+var connection = new signalR.HubConnectionBuilder().withUrl(“/NotificationUserHub”).build();
 
 connection.on(“sendToUser”, (heading, content) => {
     var heading = document.createElement(“h3”);

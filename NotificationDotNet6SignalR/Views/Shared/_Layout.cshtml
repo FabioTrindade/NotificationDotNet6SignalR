@@ -23,21 +23,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            @Html.ActionLink("Home", "Index", "Home", "", htmlAttributes: new { @class = "nav-link text-dark" })
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            @Html.ActionLink("Privacy", "Privacy", "Home", "", htmlAttributes: new { @class = "nav-link text-dark" })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Notificação", "Index", "Notification", "", htmlAttributes: new { @class = "nav-link text-dark" })
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <form method="post" asp-controller="User" asp-action="logout">
+                                @using (Html.BeginForm("Logout", "User", FormMethod.Post))
+                                {
                                     <button type="submit" style="width:auto" class="nav-link btn btn-link py-0">
                                         Logout @User.Identity.Name
                                     </button>
-                                </form>
+                                }
                             </li>
                         }
                         else

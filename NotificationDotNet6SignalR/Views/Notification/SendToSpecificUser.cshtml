@@ -1,0 +1,40 @@
+﻿@model NotificationDotNet6SignalR.Models.Article
+
+@{
+    ViewData["Title"] = "SendToSpecificUser";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("SendToSpecificUser", "Notification", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-6">
+            User Id
+        </div>
+        <div class="col-6">
+            @Html.TextBoxFor(model => Model.UserId, new { @maxlength = "50" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-6">
+            Heading
+        </div>
+        <div class="col-6">
+            @Html.TextBoxFor(model => Model.Heading, new { @maxlength = "50" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-6">
+            Content
+        </div>
+        <div class="col-6">
+            @Html.TextBoxFor(model => Model.Content, new { @maxlength = "100" })
+        </div>
+    </div>
+    <div>
+        <button type="submit">Send to Specific User</button>
+    </div>
+}

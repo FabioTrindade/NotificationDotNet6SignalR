@@ -1,30 +1,29 @@
 ﻿@model NotificationDotNet6SignalR.Models.Article
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Notificação Index";
 }
 
-<h1>ViewData["Title"]</h1>
+<h3>@ViewData["Title"]</h3>
 
-@using (Html.BeginForm("Index", "Admin", FormMethod.Post, new { id = "Article" }))
+@using (Html.BeginForm("Index", "Notification", FormMethod.Post, new { id = "frmNotificationIndex", @class = "row g-3" }))
 {
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     <div class="row">
-        <div class="col-6">
-            Article Heading
-        </div>
-        <div class="col-6">
-            <input type="text" id="articleHeading" name="articleHeading" />
-            @Html.TextBoxFor(model => Model.Heading, new { @maxlength = "50" })
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.Heading, htmlAttributes: new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Heading, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Heading, "", htmlAttributes: new { @class = "text-danger" })
         </div>
     </div>
     <div class="row">
-        <div class="col-6">
-            Article Content
-        </div>
-        <div class="col-6">
-            @Html.TextBoxFor(model => Model.Content, new { @maxlength = "100" })
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.Content, htmlAttributes: new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Content, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Content, "", htmlAttributes: new { @class = "text-danger" })
         </div>
     </div>
-    <div>
-        <button type="submit" id="Add" value="Add" />
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Enviar</button>
     </div>
 }

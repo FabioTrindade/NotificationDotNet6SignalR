@@ -21,24 +21,27 @@ public class NotificationController : Controller
         _userConnectionManagerProvider = userConnectionManagerProvider;
     }
 
+    [HttpGet]
     public IActionResult Index()
     {
         return View();
     }
 
+    [HttpPost]
     public async Task<IActionResult> Index(Article model)
     {
         await _notificationHubContext.Clients.All.SendAsync("sendToUser", model.Heading, model.Content);
         return View();
     }
 
+    [HttpGet]
     public IActionResult SendToSpecificUser()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<ActionResult> SendToSpecificUser(Article model)
+    public async Task<IActionResult> SendToSpecificUser(Article model)
     {
         var connections = _userConnectionManagerProvider.GetUserConnections(model.UserId);
 
@@ -49,6 +52,14 @@ public class NotificationController : Controller
                 await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", model.Heading, model.Content);
             }
         }
+
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SendToAllUser(Article model)
+    {
+        await _notificationHubContext.Clients.All.SendAsync("sendAllUser", model.Heading, model.Content);
 
         return View();
     }
