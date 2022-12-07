@@ -1,8 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using NotificationDotNet6SignalR.Configurations;
+﻿using NotificationDotNet6SignalR.Configurations;
 using NotificationDotNet6SignalR.Hubs;
-using NotificationDotNet6SignalR.Infra.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,32 +13,32 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
 // Initialize database
-DataContextConfiguration.InitializeDatabase(builder);
+builder.Services.InitializeDatabase(builder.Configuration);
 
 // SignIn - Unique e-mail, Password and Default settings
-IdentityConfiguration.SignIn(builder);
+builder.Services.SignIn();
 
 // Data protection token provider
-IdentityConfiguration.DataProtectionTokenProviderOptions(builder);
+builder.Services.DataProtectionTokenProviderOptions();
 
 // Password hasher
-IdentityConfiguration.PasswordHasherOptions(builder);
+builder.Services.PasswordHasherOptions();
 
 // Cookie temp data provider
-IdentityConfiguration.CookieTempDataProviderOptions(builder);
+builder.Services.CookieTempDataProviderOptions();
 
 // Cookie
-IdentityConfiguration.Cookie(builder);
+builder.Services.Cookie();
 
 // Depency Injection - Service, Repository and provider
-DependencyInjectionConfiguration.SetConfigureScopedService(builder);
-DependencyInjectionConfiguration.SetConfigureScopedRepository(builder);
-DependencyInjectionConfiguration.SetConfigureScopedProvider(builder);
+builder.Services.SetConfigureScopedService();
+builder.Services.SetConfigureScopedRepository();
+builder.Services.SetConfigureScopedProvider();
 
 var app = builder.Build();
 
 // Create database and execute migrations on start project
-DataContextConfiguration.CreateDatabaseAndExecuteMigrations(app);
+app.Services.CreateDatabaseAndExecuteMigrations();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -55,11 +52,6 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapHub<NotificationHub>("/NotificationHub");
-//});
 
 app.MapControllerRoute(
     name: "default",

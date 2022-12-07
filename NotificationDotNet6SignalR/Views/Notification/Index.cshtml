@@ -6,22 +6,18 @@
 
 <h3>@ViewData["Title"]</h3>
 
-@using (Html.BeginForm("Index", "Notification", FormMethod.Post, new { id = "frmNotificationIndex", @class = "row g-3" }))
-{
+@using (Html.BeginForm("Index", "Notification", FormMethod.Post, htmlAttributes: new { id = "frmNotificationIndex", @class = "row g-3" }))
+    {
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-    <div class="row">
-        <div class="col-md-6">
-            @Html.LabelFor(m => m.Heading, htmlAttributes: new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Heading, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Heading, "", htmlAttributes: new { @class = "text-danger" })
-        </div>
+    <div class="col-12">
+        @Html.LabelFor(m => m.Heading, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Heading, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Heading, "", htmlAttributes: new { @class = "text-danger" })
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            @Html.LabelFor(m => m.Content, htmlAttributes: new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Content, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Content, "", htmlAttributes: new { @class = "text-danger" })
-        </div>
+    <div class="col-12">
+        @Html.LabelFor(m => m.Content, htmlAttributes: new { @class = "form-label" })
+        @Html.TextAreaFor(m => m.Content, htmlAttributes: new { @class = "form-control", @rows = "5" })
+        @Html.ValidationMessageFor(m => m.Content, "", htmlAttributes: new { @class = "text-danger" })
     </div>
     <div class="col-12">
         <button type="submit" class="btn btn-primary">Enviar</button>

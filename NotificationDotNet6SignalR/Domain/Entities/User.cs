@@ -35,6 +35,10 @@ public class User : IdentityUser
     public DateTime? LastAccess { get; private set; }
 
 
+    // Relationship
+    public virtual ICollection<Notification> Notifications { get; set; }
+
+
     // Modifier
     public void SetFirstName(string firstName)
     {

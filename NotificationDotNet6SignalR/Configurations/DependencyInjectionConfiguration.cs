@@ -4,25 +4,25 @@ using NotificationDotNet6SignalR.Domain.Providers;
 using NotificationDotNet6SignalR.Domain.Repositories;
 using NotificationDotNet6SignalR.Domain.Services;
 using NotificationDotNet6SignalR.Infra.Repositories;
-using NotificationDotNet6SignalR.Services;
 using NotificationDotNet6SignalR.Providers;
+using NotificationDotNet6SignalR.Services;
 
 namespace NotificationDotNet6SignalR.Configurations;
 
-public class DependencyInjectionConfiguration
+public static class DependencyInjectionConfiguration
 {
-	public static void SetConfigureScopedService(WebApplicationBuilder builder)
-	{
-		builder.Services.AddTransient<IUserService, UserService>();
+	public static void SetConfigureScopedService(this IServiceCollection services)
+    {
+		services.AddTransient<IUserService, UserService>();
 	}
 
-	public static void SetConfigureScopedRepository(WebApplicationBuilder builder)
+	public static void SetConfigureScopedRepository(this IServiceCollection services)
 	{
-		builder.Services.AddScoped<IUserRepository, UserRepository>();
+		services.AddScoped<IUserRepository, UserRepository>();
 	}
 
-	public static void SetConfigureScopedProvider(WebApplicationBuilder builder)
+	public static void SetConfigureScopedProvider(this IServiceCollection services)
 	{
-		builder.Services.AddSingleton<IUserConnectionManagerProvider, UserConnectionManagerProvider>();
+		services.AddSingleton<IUserConnectionManagerProvider, UserConnectionManagerProvider>();
 	}
 }

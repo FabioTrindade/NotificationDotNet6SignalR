@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NotificationDotNet6SignalR.Domain.Entities;
+using NotificationDotNet6SignalR.Domain.Services;
 using NotificationDotNet6SignalR.Infra.Contexts;
 
 namespace NotificationDotNet6SignalR.Configurations;
 
 public static class IdentityConfiguration
 {
-    public static void SignIn(WebApplicationBuilder builder)
+    public static void SignIn(this IServiceCollection services)
     {
-        builder.Services.AddIdentity<User, IdentityRole>(options =>
+        services.AddIdentity<User, IdentityRole>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
 
@@ -31,28 +32,28 @@ public static class IdentityConfiguration
             .AddEntityFrameworkStores<NotificationDotNet6SignalRDataContext>()
             .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
     }
-    public static void DataProtectionTokenProviderOptions(WebApplicationBuilder builder) {
-        builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+    public static void DataProtectionTokenProviderOptions(this IServiceCollection services) {
+        services.Configure<DataProtectionTokenProviderOptions>(options =>
             options.TokenLifespan = TimeSpan.FromMinutes(15));
     }   
 
-    public static void PasswordHasherOptions(WebApplicationBuilder builder)
+    public static void PasswordHasherOptions(this IServiceCollection services)
     {
-        builder.Services.Configure<PasswordHasherOptions>(options =>
+        services.Configure<PasswordHasherOptions>(options =>
             options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2);
     }
 
-    public static void CookieTempDataProviderOptions(WebApplicationBuilder builder)
+    public static void CookieTempDataProviderOptions(this IServiceCollection services)
     {
-        builder.Services.Configure<CookieTempDataProviderOptions>(options =>
+        services.Configure<CookieTempDataProviderOptions>(options =>
         {
             options.Cookie.IsEssential = true;
         });
     }
 
-    public static void Cookie(WebApplicationBuilder builder)
+    public static void Cookie(this IServiceCollection services)
     {
-        builder.Services.ConfigureApplicationCookie(options =>
+        services.ConfigureApplicationCookie(options =>
         {
             // options.LoginPath = "/Account/Login";
             // options.LogoutPath = "/Account/Logout";

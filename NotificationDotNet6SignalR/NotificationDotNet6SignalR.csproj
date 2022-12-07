@@ -29,6 +29,9 @@
     <None Remove="Services\" />
     <None Remove="Domain\Providers\" />
     <None Remove="Providers\" />
+    <None Remove="Infra\Mappings\" />
+    <None Remove="Commons\" />
+    <None Remove="Commons\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
@@ -49,6 +52,9 @@
     <Folder Include="Services\" />
     <Folder Include="Domain\Providers\" />
     <Folder Include="Providers\" />
+    <Folder Include="Infra\Mappings\" />
+    <Folder Include="Commons\" />
+    <Folder Include="Commons\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
