@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
 using Flunt.Notifications;
 using Flunt.Validations;
 using NotificationDotNet6SignalR.Domain.Contracts;

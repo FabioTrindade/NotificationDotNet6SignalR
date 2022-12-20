@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using NotificationDotNet6SignalR.Domain.Commands;
 using NotificationDotNet6SignalR.Domain.Commands.User;
 using NotificationDotNet6SignalR.Domain.Entities;
@@ -7,10 +6,11 @@ using NotificationDotNet6SignalR.Domain.Services;
 
 namespace NotificationDotNet6SignalR.Services
 {
-	public class UserService : IUserService
+    public class UserService : IUserService
 	{
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserService(UserManager<User> userManager,
             SignInManager<User> signInManager,
@@ -18,6 +18,7 @@ namespace NotificationDotNet6SignalR.Services
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<GenericCommandResult> Handle(UserRegisterCommand command)
@@ -107,6 +108,15 @@ namespace NotificationDotNet6SignalR.Services
             await _userManager.UpdateAsync(signedUser);
 
             return new GenericCommandResult(true, "", login);
+        }
+
+        public async Task<User> LogCurrentUser()
+        {
+            var username = _httpContextAccessor.HttpContext.User;
+
+            var user = await _userManager.GetUserAsync(username);
+
+            return user;
         }
 
         public void Logout()
