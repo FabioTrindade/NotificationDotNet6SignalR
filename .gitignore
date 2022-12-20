@@ -322,6 +322,7 @@ ServiceFabricBackup/
 # Sqlite files
 *.sqlite
 *.sqlite-shm
+*.sqlite-wal
 *.sql-wal
 
 # Business Intelligence projects
