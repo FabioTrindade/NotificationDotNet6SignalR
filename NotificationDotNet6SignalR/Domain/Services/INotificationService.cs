@@ -2,6 +2,7 @@
 
 namespace NotificationDotNet6SignalR.Domain.Services;
 
-public interface INotificationService : IService<NotificationCreateCommand>
+public interface INotificationService : IService<NotificationGetCommand>
+    , IService<NotificationCreateCommand>
 {
 }

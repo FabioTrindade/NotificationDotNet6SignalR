@@ -1,19 +1,27 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl(“/NotificationUserHub”).build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/NotificationUserHub").build();
 
-connection.on(“sendToUser”, (heading, content) => {
-    var heading = document.createElement(“h3”);
-    heading.textContent = heading;
+connection.on("sendToUser", (heading, content) => {
+    //var heading = document.createElement(“h3”);
+    //heading.textContent = heading;
 
-    var p = document.createElement(“p”);
-    p.innerText = content;
+    //var p = document.createElement(“p”);
+    //p.innerText = content;
 
-    var div = document.createElement(“div”);
-    div.appendChild(heading);
-    div.appendChild(p);
+    //var div = document.createElement(“div”);
+    //div.appendChild(heading);
+    //div.appendChild(p);
 
-    document.getElementById(“articleList”).appendChild(div);
+    let tbody = `
+                    <tr>
+                        <td>${heading}</td>
+                        <td>${content}</td>
+                    <tr>`;
+
+    console.log(tbody);
+
+    document.getElementById("tblNotification").find('tbody').appendChild(tbody);
 });
 
 connection.start().catch(function (err) {

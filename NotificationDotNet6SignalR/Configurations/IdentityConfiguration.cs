@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NotificationDotNet6SignalR.Domain.Entities;
-using NotificationDotNet6SignalR.Domain.Services;
 using NotificationDotNet6SignalR.Infra.Contexts;
 
 namespace NotificationDotNet6SignalR.Configurations;
@@ -10,7 +9,7 @@ public static class IdentityConfiguration
 {
     public static void SignIn(this IServiceCollection services)
     {
-        services.AddIdentity<User, IdentityRole>(options =>
+        services.AddIdentity<User, IdentityRole<Guid>>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
 
@@ -29,8 +28,8 @@ public static class IdentityConfiguration
             options.Lockout.MaxFailedAccessAttempts = 5;
             options.Lockout.AllowedForNewUsers = true;
         })
-            .AddEntityFrameworkStores<NotificationDotNet6SignalRDataContext>()
-            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+        .AddEntityFrameworkStores<NotificationDotNet6SignalRDataContext>()
+        .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
     }
     public static void DataProtectionTokenProviderOptions(this IServiceCollection services) {
         services.Configure<DataProtectionTokenProviderOptions>(options =>

@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<NotificationDotNet6SignalR.Domain.Entities.User> SignInManager
 
+@{
+    var signInManager = SignInManager.IsSignedIn(User);
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +14,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NotificationDotNet6SignalR.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/notification/ikr.notification.css" />
 </head>
 <body>
     <header>
@@ -21,6 +26,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <div id="notifications-container"></div>
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             @Html.ActionLink("Home", "Index", "Home", "", htmlAttributes: new { @class = "nav-link text-dark" })
@@ -28,12 +34,15 @@
                         <li class="nav-item">
                             @Html.ActionLink("Privacy", "Privacy", "Home", "", htmlAttributes: new { @class = "nav-link text-dark" })
                         </li>
-                        <li>
-                            @Html.ActionLink("Notificação", "Index", "Notification", "", htmlAttributes: new { @class = "nav-link text-dark" })
-                        </li>
+                        @if (signInManager)
+                        {
+                            <li>
+                                @Html.ActionLink("Notificação", "Index", "Notification", "", htmlAttributes: new { @class = "nav-link text-dark" })
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        @if (SignInManager.IsSignedIn(User))
+                        @if (signInManager)
                         {
                             <li class="nav-item">
                                 @using (Html.BeginForm("Logout", "User", FormMethod.Post))
@@ -71,9 +80,16 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/signalr/signalr.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/notification.js"></script>
+    <script src="~/lib/notification/ikr.notification.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#notifications-container').ikrNotificationSetup();
+    });
+</script>

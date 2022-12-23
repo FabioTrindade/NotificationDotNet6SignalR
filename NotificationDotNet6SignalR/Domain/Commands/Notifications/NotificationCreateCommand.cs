@@ -12,11 +12,11 @@ public class NotificationCreateCommand : Notifiable<Notification>, ICommand
     public string Header { get; set; }
 
     [Required(ErrorMessage = "O conteudo é obrigatório", AllowEmptyStrings = false)]
-    [Display(Name = "Conteudo")]
+    [Display(Name = "Conteúdo")]
     public string Content { get; set; }
 
     [Display(Name = "Para")]
-    public string ToUserId { get; set; }
+    public Guid? ToUserId { get; set; }
 
     // Validations
     public void Validate()

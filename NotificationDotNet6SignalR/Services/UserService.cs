@@ -41,7 +41,15 @@ namespace NotificationDotNet6SignalR.Services
             }
 
             // Preenche a classe IdentityUser
-            var user = new User(command.FirstName, command.LastName, command.Email, command.Email);
+            var user = new User(
+                firstName: command.FirstName,
+                lastName: command.LastName,
+                userName: command.Email,
+                email: command.Email
+            );
+
+            // Pra criar o user com e-mail confirmado
+            user.EmailConfirmed = true;
 
             // Cria usuário na tabela AspNetUsers
             var userCreate = await _userManager.CreateAsync(user, command.Password);
@@ -118,6 +126,9 @@ namespace NotificationDotNet6SignalR.Services
 
             return user;
         }
+
+        public async Task<ConnectionInfo> ConnectionCurrentUser()
+            => _httpContextAccessor.HttpContext.Connection;
 
         public void Logout()
         {

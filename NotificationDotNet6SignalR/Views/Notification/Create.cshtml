@@ -1,0 +1,25 @@
+﻿@model NotificationDotNet6SignalR.Domain.Commands.Notifications.NotificationCreateCommand
+
+@{
+    ViewData["Title"] = "Notificação Create";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+@using (Html.BeginForm("Create", "Notification", FormMethod.Post, htmlAttributes: new { id = "frmNotificationCreate", @class = "row g-3" }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div class="col-12">
+        @Html.LabelFor(m => m.Header, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Header, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Header, "", htmlAttributes: new { @class = "text-danger" })
+    </div>
+    <div class="col-12">
+        @Html.LabelFor(m => m.Content, htmlAttributes: new { @class = "form-label" })
+        @Html.TextAreaFor(m => m.Content, htmlAttributes: new { @class = "form-control", @rows = "5" })
+        @Html.ValidationMessageFor(m => m.Content, "", htmlAttributes: new { @class = "text-danger" })
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+}

@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NotificationDotNet6SignalR.Commons.Extensions;
@@ -7,7 +8,7 @@ using NotificationDotNet6SignalR.Infra.Mappings;
 
 namespace NotificationDotNet6SignalR.Infra.Contexts;
 
-public class NotificationDotNet6SignalRDataContext : IdentityDbContext<User>
+public class NotificationDotNet6SignalRDataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     private readonly IConfiguration _configuration;
 

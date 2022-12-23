@@ -18,11 +18,20 @@ internal class NotificationMapping : DbEntityConfiguration<Notification>
         entityBuilder.Property(t => t.Content).IsRequired().HasColumnType("TEXT");
         entityBuilder.Property(t => t.IsRead).IsRequired().HasColumnType("BIT").HasDefaultValueSql("0");
 
-        entityBuilder.HasOne(u => u.User)
-            .WithMany(n => n.Notifications)
-            .HasForeignKey(fk => fk.FromUserId)
-            .HasForeignKey(fk => fk.ToUserId)
-            .HasConstraintName("Fk_User_Notifications_Id")
+        entityBuilder
+            .HasOne(u => u.From)
+            .WithMany(n => n.NotificationsFrom)
+            .HasForeignKey(fk => fk.FromId)
+            .IsRequired(true)
+            .HasConstraintName("Fk_Not_User_From")
+            .OnDelete(DeleteBehavior.Restrict);
+
+        entityBuilder
+            .HasOne(u => u.To)
+            .WithMany(n => n.NotificationsTo)
+            .HasForeignKey(fk => fk.ToId)
+            .IsRequired(false)
+            .HasConstraintName("Fk_Not_User_To")
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

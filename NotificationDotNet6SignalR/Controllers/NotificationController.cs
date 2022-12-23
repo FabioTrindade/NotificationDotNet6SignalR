@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using NotificationDotNet6SignalR.Domain.Commands.Notifications;
+using NotificationDotNet6SignalR.Domain.DTOs.Notification;
 using NotificationDotNet6SignalR.Domain.Providers;
+using NotificationDotNet6SignalR.Domain.Services;
 using NotificationDotNet6SignalR.Hubs;
 using NotificationDotNet6SignalR.Models;
 
@@ -11,26 +14,49 @@ public class NotificationController : Controller
     private readonly IHubContext<NotificationHub> _notificationHubContext;
     private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
     private readonly IUserConnectionManagerProvider _userConnectionManagerProvider;
+    private readonly INotificationService _notificationService;
 
     public NotificationController(IHubContext<NotificationHub> notificationHubContext,
         IHubContext<NotificationUserHub> notificationUserHubContext,
-        IUserConnectionManagerProvider userConnectionManagerProvider)
+        IUserConnectionManagerProvider userConnectionManagerProvider,
+        INotificationService notificationService)
     {
         _notificationHubContext = notificationHubContext;
         _notificationUserHubContext = notificationUserHubContext;
         _userConnectionManagerProvider = userConnectionManagerProvider;
+        _notificationService = notificationService;
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
+    {
+        var result = await _notificationService.Handle(new NotificationGetCommand());
+        return View(result.Data as List<NotificationDto>);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Index(NotificationGetCommand command)
+    {
+        var result = await _notificationService.Handle(command);
+        return View(result.Data as List<NotificationDto>);
+    }
+
+    [HttpGet]
+    public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Index(Article model)
+    public async Task<IActionResult> Create(NotificationCreateCommand command)
     {
-        await _notificationHubContext.Clients.All.SendAsync("sendToUser", model.Heading, model.Content);
+        await _notificationService.Handle(command);
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public ActionResult All()
+    {
         return View();
     }
 

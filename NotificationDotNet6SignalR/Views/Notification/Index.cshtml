@@ -1,4 +1,4 @@
-﻿@model NotificationDotNet6SignalR.Models.Article
+﻿@model List<NotificationDotNet6SignalR.Domain.DTOs.Notification.NotificationDto>
 
 @{
     ViewData["Title"] = "Notificação Index";
@@ -6,20 +6,28 @@
 
 <h3>@ViewData["Title"]</h3>
 
-@using (Html.BeginForm("Index", "Notification", FormMethod.Post, htmlAttributes: new { id = "frmNotificationIndex", @class = "row g-3" }))
-    {
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-    <div class="col-12">
-        @Html.LabelFor(m => m.Heading, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(m => m.Heading, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Heading, "", htmlAttributes: new { @class = "text-danger" })
-    </div>
-    <div class="col-12">
-        @Html.LabelFor(m => m.Content, htmlAttributes: new { @class = "form-label" })
-        @Html.TextAreaFor(m => m.Content, htmlAttributes: new { @class = "form-control", @rows = "5" })
-        @Html.ValidationMessageFor(m => m.Content, "", htmlAttributes: new { @class = "text-danger" })
-    </div>
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary">Enviar</button>
-    </div>
-}
+<a class="btn btn-success" asp-controller="Notification" asp-action="Create"> Create </a>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">De</th>
+            <th scope="col">Para</th>
+            <th scope="col">Lido</th>
+            <th scope="col">Criação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-bs-toggle="tooltip" data-bs-placement="top" title="@string.Format("Header: {0} | Content: {1}", item.Header, item.Content)">
+                <td>@item.Id</td>
+                <td>@item.FromName</td>
+                <td>@item.ToName</td>
+                <td>@item.IsRead</td>
+                <td>@item.CreatedAt</td>
+            </tr>
+        }
+    </tbody>
+</table>

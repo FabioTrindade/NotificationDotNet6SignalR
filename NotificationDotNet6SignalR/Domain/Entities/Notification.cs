@@ -9,17 +9,15 @@ public record Notification : Entity
     {
     }
 
-    public Notification(Guid fromUserId,
-        Guid? toUserId,
+    public Notification(
+        Guid fromId,
         string header,
-        string content,
-        bool isRead)
+        string content)
     {
-        FromUserId = fromUserId;
-        ToUserId = toUserId;
+        FromId = fromId;
         Header = header;
         Content = content;
-        IsRead = isRead;
+        IsRead = false;
     }
 
 
@@ -30,18 +28,19 @@ public record Notification : Entity
 
     public bool IsRead { get; private set; }
 
+    public Guid FromId { get; private set; }
+
+    public Guid? ToId { get; private set; }
+
 
     // Modifier
-    public void SetIdRead(bool isRead)
-    {
-        this.IsRead = isRead;
-    }
+    public void SetIdRead(bool isRead) => this.IsRead = isRead;
+
+    public void SetUserToId(Guid? toId) => this.ToId = toId;
 
 
     // Relationship
-    public Guid FromUserId { get; private set; }
+    public virtual User From { get; private set; }
 
-    public Guid? ToUserId { get; private set; }
-
-    public virtual User User { get; private set; }
+    public virtual User? To { get; private set; }
 }

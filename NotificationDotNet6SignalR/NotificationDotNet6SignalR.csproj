@@ -32,6 +32,8 @@
     <None Remove="Infra\Mappings\" />
     <None Remove="Commons\" />
     <None Remove="Commons\Extensions\" />
+    <None Remove="Domain\DTOs\" />
+    <None Remove="Domain\DTOs\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
@@ -55,6 +57,9 @@
     <Folder Include="Infra\Mappings\" />
     <Folder Include="Commons\" />
     <Folder Include="Commons\Extensions\" />
+    <Folder Include="Domain\DTOs\" />
+    <Folder Include="Domain\DTOs\Notification\" />
+    <Folder Include="wwwroot\lib\notification\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
@@ -64,6 +69,9 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Flunt" Version="2.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\lib\notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="wwwroot\favicon.ico">

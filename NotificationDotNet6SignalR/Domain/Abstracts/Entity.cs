@@ -8,6 +8,7 @@ public abstract record Entity
     public Entity()
     {
         Active = true;
+        CreatedAt = DateTime.Now;
     }
 
 

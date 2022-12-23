@@ -1,38 +1,38 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using NotificationDotNet6SignalR.Domain.Providers;
+using NotificationDotNet6SignalR.Domain.Services;
 
 namespace NotificationDotNet6SignalR.Hubs;
 
 public class NotificationUserHub : Hub
 {
     private readonly IUserConnectionManagerProvider _userConnectionManagerProvider;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserService _userService;
 
     public NotificationUserHub(IUserConnectionManagerProvider userConnectionManagerProvider,
-        IHttpContextAccessor httpContextAccessor)
+        IUserService userService)
 	{
-        userConnectionManagerProvider = _userConnectionManagerProvider;
-        httpContextAccessor = _httpContextAccessor;
+        _userConnectionManagerProvider = userConnectionManagerProvider;
+        _userService = userService;
     }
 
     public string GetConnectionId()
     {
-        var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var connectionId = _httpContextAccessor.HttpContext.Connection.Id;
+        var user = _userService.LogCurrentUser().Result;
+        var connection = _userService.ConnectionCurrentUser().Result;
 
-        _userConnectionManagerProvider.KeepUserConnection(userId, connectionId);
+        _userConnectionManagerProvider.KeepUserConnection(user.Id.ToString(), connection.Id);
 
-        return connectionId;
+        return connection.Id;
     }
 
     //Called when a connection with the hub is terminated.
     public async override Task OnDisconnectedAsync(Exception exception)
     {
         //get the connectionId
-        var connectionId = _httpContextAccessor.HttpContext.Connection.Id;
+        var connection = _userService.ConnectionCurrentUser().Result;
 
-        _userConnectionManagerProvider.RemoveUserConnection(connectionId);
+        _userConnectionManagerProvider.RemoveUserConnection(connection.Id);
 
         var value = await Task.FromResult(0);
     }
