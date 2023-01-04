@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NotificationDotNet6SignalR.Domain.Commands.User;
 using NotificationDotNet6SignalR.Domain.Services;
 
@@ -88,6 +89,14 @@ public class UserController : Controller
         }
 
         return View(command);
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> GetUserActive()
+    {
+        var result = await _userService.GetUserActive();
+        return Json(result.Data as IEnumerable<SelectListItem>);
     }
 
     [Authorize]

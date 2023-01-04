@@ -54,10 +54,10 @@ public static class IdentityConfiguration
     {
         services.ConfigureApplicationCookie(options =>
         {
-            // options.LoginPath = "/Account/Login";
-            // options.LogoutPath = "/Account/Logout";
+            // options.LoginPath = "/User/Login";
+            // options.LogoutPath = "/User/Logout";
             options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-            // options.AccessDeniedPath = "/Account/Login";
+            options.AccessDeniedPath = "/User/Login";
         });
     }
 }

@@ -34,7 +34,7 @@ public record Notification : Entity
 
 
     // Modifier
-    public void SetIdRead(bool isRead) => this.IsRead = isRead;
+    public void SetIsRead(bool isRead) => this.IsRead = isRead;
 
     public void SetUserToId(Guid? toId) => this.ToId = toId;
 

@@ -1,8 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<NotificationDotNet6SignalR.Domain.Entities.User> SignInManager
+@inject UserManager<NotificationDotNet6SignalR.Domain.Entities.User> UserManager
 
 @{
     var signInManager = SignInManager.IsSignedIn(User);
+    var userManager = await UserManager.GetUserAsync(User);
 }
 
 <!DOCTYPE html>
@@ -11,10 +13,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - NotificationDotNet6SignalR</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NotificationDotNet6SignalR.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/notification/ikr.notification.css" />
+    <link rel="stylesheet" href="~/lib/notification/ikr.notification.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" asp-append-version="true">
 </head>
 <body>
     <header>
@@ -26,7 +30,11 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <div id="notifications-container"></div>
+                    @if (signInManager)
+                    {
+                        @Html.Hidden("UserId", userManager.Id)
+                        <div id="notifications-container"></div>
+                    }
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             @Html.ActionLink("Home", "Index", "Home", "", htmlAttributes: new { @class = "nav-link text-dark" })
@@ -78,18 +86,49 @@
             &copy; 2022 - NotificationDotNet6SignalR - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/notification.js"></script>
-    <script src="~/lib/notification/ikr.notification.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js" asp-append-version="true"></script>
+    <script src="~/lib/select2/js/select2.full.min.js" asp-append-version="true"></script>
+    <script src="~/js/notification-hub.js" asp-append-version="true"></script>
+    <script src="~/js/user-notification-hub.js" asp-append-version="true"></script>
+    <script src="~/lib/notification/ikr.notification.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <partial name="_validationscriptspartial" />
 </body>
 </html>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#notifications-container').ikrNotificationSetup();
+        const logged = '@Html.Raw(signInManager)'.toLowerCase();
+        if (logged == 'true') {
+            $('#notifications-container').ikrNotificationSetup();
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '/Notification/All',
+                traditional: true,
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var notifications = data;
+                    $("#notifications-container").ikrNotificationCount({
+                        NotificationList: notifications,
+                        NotiFromPropName: "FromName",
+                        ListTitlePropName: "Header",
+                        ListBodyPropName: "Content",
+                        ControllerName: "Notification",
+                        ActionName: "All"
+                    });
+                },
+                error: function (xhr, status, error) {
+                }
+            })
+        }
     });
 </script>

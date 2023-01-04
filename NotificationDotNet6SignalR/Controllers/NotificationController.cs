@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using NotificationDotNet6SignalR.Domain.Commands.Notifications;
 using NotificationDotNet6SignalR.Domain.DTOs.Notification;
 using NotificationDotNet6SignalR.Domain.Providers;
 using NotificationDotNet6SignalR.Domain.Services;
 using NotificationDotNet6SignalR.Hubs;
-using NotificationDotNet6SignalR.Models;
 
 namespace NotificationDotNet6SignalR.Controllers;
 
+[Authorize]
 public class NotificationController : Controller
 {
     private readonly IHubContext<NotificationHub> _notificationHubContext;
@@ -55,38 +56,22 @@ public class NotificationController : Controller
     }
 
     [HttpGet]
-    public ActionResult All()
+    public async Task<IActionResult> All()
     {
-        return View();
+        var result = await _notificationService.GetNotificationByUserId();
+        return Json(result.Data);
     }
 
     [HttpGet]
-    public IActionResult SendToSpecificUser()
-    {
-        return View();
+    public async Task<IActionResult> Details(Guid Id) {
+        var result = await _notificationService.Handle(new NotificatonGetByIdCommand(Id));
+        return View(result.Data as NotificationDto);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> SendToSpecificUser(Article model)
+    [HttpPut]
+    public async Task<IActionResult> ChangeRead(NotificationUpdateReadCommand command)
     {
-        var connections = _userConnectionManagerProvider.GetUserConnections(model.UserId);
-
-        if (connections != null && connections.Count > 0)
-        {
-            foreach (var connectionId in connections)
-            {
-                await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", model.Heading, model.Content);
-            }
-        }
-
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> SendToAllUser(Article model)
-    {
-        await _notificationHubContext.Clients.All.SendAsync("sendAllUser", model.Heading, model.Content);
-
-        return View();
+        var result = await _notificationService.Handle(command);
+        return Json(result);
     }
 }

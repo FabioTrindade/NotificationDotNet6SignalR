@@ -1,4 +1,5 @@
-﻿using NotificationDotNet6SignalR.Domain.Commands;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using NotificationDotNet6SignalR.Domain.Commands;
 using NotificationDotNet6SignalR.Domain.Commands.User;
 using NotificationDotNet6SignalR.Domain.Entities;
 
@@ -10,6 +11,8 @@ public interface IUserService : IService<UserRegisterCommand>,
     Task<User> LogCurrentUser();
 
     Task<ConnectionInfo> ConnectionCurrentUser();
+
+    Task<GenericCommandResult> GetUserActive();
 
     void Logout();
 }

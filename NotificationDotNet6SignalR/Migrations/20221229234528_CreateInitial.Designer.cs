@@ -11,7 +11,7 @@ using NotificationDotNet6SignalR.Infra.Contexts;
 namespace NotificationDotNet6SignalR.Migrations
 {
     [DbContext(typeof(NotificationDotNet6SignalRDataContext))]
-    [Migration("20221223215609_CreateInitial")]
+    [Migration("20221229234528_CreateInitial")]
     partial class CreateInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -198,6 +198,9 @@ namespace NotificationDotNet6SignalR.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")

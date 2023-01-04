@@ -6,4 +6,8 @@ namespace NotificationDotNet6SignalR.Domain.Repositories;
 public interface INotificationRepository : IEntityRepository<Notification>
 {
     Task<List<NotificationDto>> GetAllNotifications();
+
+    Task<List<NotificationDto>> GetAllByUserId(Guid userId);
+
+    Task<NotificationDto> GetById(Guid id);
 }

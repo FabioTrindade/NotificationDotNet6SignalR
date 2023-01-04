@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using NotificationDotNet6SignalR.Domain.Abstracts;
 
 namespace NotificationDotNet6SignalR.Domain.Entities;
 
@@ -8,7 +9,6 @@ public class User : IdentityUser<Guid>
     // Constructor
     public User()
     {
-        CreatedAt = DateTime.Now;
     }
 
     public User(
@@ -21,6 +21,8 @@ public class User : IdentityUser<Guid>
         LastName = lastName;
         UserName = userName;
         Email = email;
+        CreatedAt = DateTime.Now;
+        Active = false;
     }
 
 
@@ -31,9 +33,11 @@ public class User : IdentityUser<Guid>
     [StringLength(maximumLength: 100, ErrorMessage = "O sobrenome deve ter no máximo {0} caracteres.")]
     public string LastName { get; private set; }    
 
-    public DateTime CreatedAt { get; init; }
+    public DateTime CreatedAt { get; private set; }
 
     public DateTime? LastAccess { get; private set; }
+
+    public bool Active { get; private set; }
 
 
     // Relationship
@@ -52,4 +56,6 @@ public class User : IdentityUser<Guid>
     public void SetPhoneNumber(string phoneNumber) => this.PhoneNumber = phoneNumber;
 
     public void SetLastAccess(DateTime lastAccess) => this.LastAccess = lastAccess;
+
+    public void SetActive(Boolean active) => this.Active = active;
 }

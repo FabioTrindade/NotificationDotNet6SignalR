@@ -2,14 +2,17 @@
 
 @{
     ViewBag.Title = "Login de Usuário";
+    var returnUrl = Context.Request.Query["returnurl"].ToString();
 }
 
 <h3>@ViewBag.Title</h3>
 
 @using (Html.BeginForm("Login", "User", FormMethod.Post, htmlAttributes: new { id = "frmUserLogin", @class = "row g-3" }))
 {
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     <div class="row">
+        <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@returnUrl" />
         <div class="col-md-6">
             @Html.LabelFor(m => m.Email, htmlAttributes: new { @class = "form-label" })
             @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @class = "form-control" })

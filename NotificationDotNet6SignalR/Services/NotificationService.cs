@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Reflection.PortableExecutable;
+using System.Threading;
+using Microsoft.AspNetCore.SignalR;
 using NotificationDotNet6SignalR.Domain.Commands;
 using NotificationDotNet6SignalR.Domain.Commands.Notifications;
+using NotificationDotNet6SignalR.Domain.DTOs.Notification;
 using NotificationDotNet6SignalR.Domain.Entities;
 using NotificationDotNet6SignalR.Domain.Providers;
 using NotificationDotNet6SignalR.Domain.Repositories;
@@ -70,6 +73,40 @@ public class NotificationService : INotificationService
     public async Task<GenericCommandResult> Handle(NotificationGetCommand command)
     {
         var result = await _notificationRepository.GetAllNotifications();
+        return new GenericCommandResult(true, "", result);
+    }
+
+    public async Task<GenericCommandResult> GetNotificationByUserId()
+    {
+        var user = await _userService.LogCurrentUser();
+
+        var result = await _notificationRepository.GetAllByUserId(user.Id);
+
+        return new GenericCommandResult(true, "", result);
+    }
+
+    public async Task<GenericCommandResult> Handle(NotificatonGetByIdCommand command)
+    {
+        var result = await _notificationRepository.GetById(command.NotificationId);
+
+        return new GenericCommandResult(true, "", result);
+    }
+
+    public async Task<GenericCommandResult> Handle(NotificationUpdateReadCommand command)
+    {
+        var notification = await _notificationRepository.GetByIdAsync(command.Id);
+
+        if (notification is null)
+        {
+            command.AddNotification("", "Notificação não encontrada.");
+            return new GenericCommandResult(false, "", command.Notifications);
+        }
+
+        notification.SetIsRead(command.Status);
+        notification.SetUpdatedAt(DateTime.Now);
+
+        var result = await _notificationRepository.UpdateAsync(notification);
+
         return new GenericCommandResult(true, "", result);
     }
 

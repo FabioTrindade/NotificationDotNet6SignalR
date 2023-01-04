@@ -17,7 +17,7 @@ public static class DependencyInjectionConfiguration
 
 	public static void SetConfigureScopedRepository(this IServiceCollection services)
 	{
-		services.AddScoped<IUserRepository, UserRepository>();
+		services.AddScoped<IDapperRepository, DapperRepository>();
 		services.AddScoped<INotificationRepository, NotificationRepository>();
     }
 

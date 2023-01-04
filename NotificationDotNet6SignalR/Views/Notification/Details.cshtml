@@ -1,0 +1,42 @@
+﻿@model NotificationDotNet6SignalR.Domain.DTOs.Notification.NotificationDto
+
+@{
+    ViewData["Title"] = "Notificação Details";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+@using (Html.BeginForm("Details", "Notification", FormMethod.Post, htmlAttributes: new { id = "frmNotificationDetails", @class = "row g-3" }))
+{
+    <div class="col-12">
+        @Html.Label("", "De", htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.FromName, htmlAttributes: new { @class = "form-control", @disable = "disable", @readonly = "readonly" })
+    </div>
+    <div class="col-12">
+        @Html.Label("", "Para", htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.ToName, htmlAttributes: new { @class = "form-control", @disable = "disable", @readonly = "readonly" })
+    </div>
+    <div class="col-12">
+        @Html.Label("", "Cabeçalho", htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Header, htmlAttributes: new { @class = "form-control", @disable = "disable", @readonly = "readonly" })
+    </div>
+    <div class="col-12">
+        @Html.Label("", "Conteúdo", htmlAttributes: new { @class = "form-label" })
+        @Html.TextAreaFor(m => m.Content, htmlAttributes: new { @class = "form-control", @rows = "5", @disable = "disable", @readonly = "readonly" })
+    </div>
+    <div class="col-6 col-md-6">
+        @Html.Label("", "Criado em", htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.CreatedAt, htmlAttributes: new { @class = "form-control", @disable = "disable", @readonly = "readonly" })
+    </div>
+    <div class="col-6 col-md-6">
+        @Html.Label("", "Visualizado?", htmlAttributes: new { @class = "form-label" })
+        <br />
+        @Html.CheckBoxFor(m => m.IsRead, htmlAttributes: new { @class = "form-control form-check-input", @data_toggle = "toggle", @data_on = "Sim", @data_off = "Não", @data_onstyle = "success", @data_offstyle = "danger", @data_notification_id = Model.Id })
+    </div>
+    <div class="col-12">
+        @Html.ActionLink("Voltar", "Index", "Notification", "", htmlAttributes: new { @class = "btn btn-danger" })
+    </div>
+}
+@section Scripts{
+    <script src="~/js/notification.js"></script>
+}

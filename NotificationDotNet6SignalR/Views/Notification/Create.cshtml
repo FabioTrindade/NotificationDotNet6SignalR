@@ -10,6 +10,14 @@
 {
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     <div class="col-12">
+        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Caso não informe o campo todos serão notificados.">
+            @Html.LabelFor(m => m.ToUserId, htmlAttributes: new { @class = "form-label" })
+            &#8505;
+        </span>
+        @Html.DropDownListFor(m => m.ToUserId, new SelectList("", "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ToUserId, "", htmlAttributes: new { @class = "text-danger" })
+    </div>
+    <div class="col-12">
         @Html.LabelFor(m => m.Header, htmlAttributes: new { @class = "form-label" })
         @Html.TextBoxFor(m => m.Header, htmlAttributes: new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Header, "", htmlAttributes: new { @class = "text-danger" })
@@ -22,4 +30,7 @@
     <div class="col-12">
         <button type="submit" class="btn btn-primary">Enviar</button>
     </div>
+}
+@section Scripts{
+    <script type="text/javascript">createComboAjaxPagination('ToUserId', 'Selecione um usuário', '/User/GetUserActive', null);</script>
 }

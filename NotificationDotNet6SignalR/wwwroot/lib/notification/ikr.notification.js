@@ -56,8 +56,8 @@
             NotiFromPropName: "",
             ListTitlePropName: "",
             ListBodyPropName: "",
-            ControllerName: "Notifications",
-            ActionName: "AllNotifications"
+            ControllerName: "Notification",
+            ActionName: "All"
         }, options);
         var parentId = $(this).attr("id");
         if ($.trim(parentId) != "" && parentId.length > 0) {
@@ -76,8 +76,9 @@
                         "<h4 class='ikrNotiFromPropName'>" + sNotiFromPropName + "</h4>" +
                         "<h5 class='ikrNotificationTitle'>" + item[ikrLowerFirstLetter(defaultSettings.ListTitlePropName)] + "</h5>" +
                         "<div class='ikrNotificationBody'>" + item[ikrLowerFirstLetter(defaultSettings.ListBodyPropName)] + "</div>" +
-                        "<div class='ikrNofiCreatedDate'>" + item.createdDateSt + "</div>" +
+                        "<div class='ikrNofiCreatedDate'>" + item.createdAt + "</div>" +
                         "</div>");
+
                     $("#" + parentId + " .ikrNotificationItems .ikrSingleNotiDiv[notiId=" + item.notiId + "]").click(function () {
                         if ($.trim(item.url) != "") {
                             window.location.href = item.url;

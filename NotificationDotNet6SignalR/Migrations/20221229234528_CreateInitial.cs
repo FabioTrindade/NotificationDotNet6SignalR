@@ -32,6 +32,7 @@ namespace NotificationDotNet6SignalR.Migrations
                     LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     LastAccess = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),

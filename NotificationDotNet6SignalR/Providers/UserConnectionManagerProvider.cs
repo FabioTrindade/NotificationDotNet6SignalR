@@ -5,33 +5,33 @@ namespace NotificationDotNet6SignalR.Providers;
 
 public class UserConnectionManagerProvider : IUserConnectionManagerProvider
 {
-	private static Dictionary<string, List<string>> userConnectionMap = new Dictionary<string, List<string>>();
-	private static string userConnectionMapLocker = string.Empty;
+	private static readonly Dictionary<string, List<string>> _userConnectionMap = new Dictionary<string, List<string>>();
+	private static readonly string _userConnectionMapLocker = string.Empty;
 
     public void KeepUserConnection(string userId, string connectionId)
     {
-        lock (userConnectionMapLocker)
+        lock (_userConnectionMapLocker)
         {
-            if (!userConnectionMap.ContainsKey(userId))
+            if (!_userConnectionMap.ContainsKey(userId))
             {
-                userConnectionMap[userId] = new List<string>();
+                _userConnectionMap[userId] = new List<string>();
             }
-            userConnectionMap[userId].Add(connectionId);
+            _userConnectionMap[userId].Add(connectionId);
         }
     }
 
     public void RemoveUserConnection(string connectionId)
     {
         //This method will remove the connectionId of user 
-        lock (userConnectionMapLocker)
+        lock (_userConnectionMapLocker)
         {
-            foreach (var userId in userConnectionMap.Keys)
+            foreach (var userId in _userConnectionMap.Keys)
             {
-                if (userConnectionMap.ContainsKey(userId))
+                if (_userConnectionMap.ContainsKey(userId))
                 {
-                    if (userConnectionMap[userId].Contains(connectionId))
+                    if (_userConnectionMap[userId].Contains(connectionId))
                     {
-                        userConnectionMap[userId].Remove(connectionId);
+                        _userConnectionMap[userId].Remove(connectionId);
                         break;
                     }
                 }
@@ -42,9 +42,9 @@ public class UserConnectionManagerProvider : IUserConnectionManagerProvider
     public List<string> GetUserConnections(string userId)
     {
         var conn = new List<string>();
-        lock (userConnectionMapLocker)
+        lock (_userConnectionMapLocker)
         {
-            conn = userConnectionMap[userId];
+            conn = _userConnectionMap[userId];
         }
         return conn;
     }

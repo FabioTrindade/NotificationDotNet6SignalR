@@ -19,4 +19,6 @@ public record NotificationDto
 	public bool IsRead { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+	public string? Url => string.Format("/Notification/Details/{0}", Id);
 }

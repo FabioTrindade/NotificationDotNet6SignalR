@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using NotificationDotNet6SignalR.Domain.Commands;
 using NotificationDotNet6SignalR.Domain.Commands.User;
 using NotificationDotNet6SignalR.Domain.Entities;
@@ -7,14 +9,14 @@ using NotificationDotNet6SignalR.Domain.Services;
 namespace NotificationDotNet6SignalR.Services
 {
     public class UserService : IUserService
-	{
+    {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            IHttpContextAccessor httpContextAccessor)
+        public UserService(UserManager<User> userManager
+            , SignInManager<User> signInManager
+            , IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -101,7 +103,7 @@ namespace NotificationDotNet6SignalR.Services
                 return new GenericCommandResult(false, "", command.Notifications);
             }
 
-            // realiza o login e autentica no identity
+            // Realiza o login e autentica no identity
             SignInResult login = await _signInManager.PasswordSignInAsync(signedUser, command.Password, false, lockoutOnFailure: false);
 
             if (!login.Succeeded)
@@ -113,7 +115,8 @@ namespace NotificationDotNet6SignalR.Services
             // Register last access in application
             signedUser.SetLastAccess(DateTime.Now);
 
-            await _userManager.UpdateAsync(signedUser);
+            // Set active for visible especific notifcation
+            signedUser.SetActive(true);
 
             return new GenericCommandResult(true, "", login);
         }
@@ -129,6 +132,22 @@ namespace NotificationDotNet6SignalR.Services
 
         public async Task<ConnectionInfo> ConnectionCurrentUser()
             => _httpContextAccessor.HttpContext.Connection;
+
+        public async Task<GenericCommandResult> GetUserActive()
+        {
+            var user = await LogCurrentUser();
+
+            var users = await _userManager.Users
+                                .Where(w => w.Active == true && w.Id != user.Id)
+                                .AsNoTracking()
+                                .ToListAsync();
+
+            var result = users.ConvertAll(c => new SelectListItem(
+                text: string.Format("{0} {1}", c.FirstName, c.LastName),
+                value: c.Id.ToString()));
+
+            return new GenericCommandResult(true, "", result);
+        }
 
         public void Logout()
         {
