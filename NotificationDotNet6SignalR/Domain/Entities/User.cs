@@ -45,6 +45,8 @@ public class User : IdentityUser<Guid>
 
     public virtual ICollection<Notification> NotificationsTo { get; private set; }
 
+    public virtual ICollection<Connection> Connections { get; private set; }
+
 
     // Modifier
     public void SetFirstName(string firstName) => this.FirstName = firstName;

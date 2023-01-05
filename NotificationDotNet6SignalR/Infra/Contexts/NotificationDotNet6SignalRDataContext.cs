@@ -20,6 +20,8 @@ public class NotificationDotNet6SignalRDataContext : IdentityDbContext<User, Ide
 
     public DbSet<Notification> Notifications { get; set; }
 
+    public DbSet<Connection> Connections { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         if (!options.IsConfigured)
@@ -34,5 +36,6 @@ public class NotificationDotNet6SignalRDataContext : IdentityDbContext<User, Ide
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.AddConfiguration(new NotificationMapping());
+        modelBuilder.AddConfiguration(new ConnectionMapping());
     }
 }
