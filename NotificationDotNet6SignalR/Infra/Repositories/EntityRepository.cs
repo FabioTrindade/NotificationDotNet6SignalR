@@ -54,6 +54,19 @@ public class EntityRepository<TEntity> : IEntityRepository<TEntity> where TEntit
         }
     }
 
+    public virtual async Task DeleteAll(IList<TEntity> entity)
+    {
+        try
+        {
+            _dbSet.RemoveRange(entity);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(string.Concat("DELETE ALL: ", this.GetType().Name), ex);
+        }
+    }
+
     public virtual async Task<TEntity> GetByIdAsync(Guid id)
         => await _dbSet.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id) ?? Activator.CreateInstance<TEntity>();
 

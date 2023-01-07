@@ -10,21 +10,27 @@ public record Connection : Entity
 	}
 
     public Connection(string connectionId
-        , string userAgent
-        , bool connected)
+        , bool connected
+        , Guid userId)
     {
         ConnectionId = connectionId;
-        UserAgent = userAgent;
         Connected = connected;
+        UserId = userId;
     }
 
-    public string ConnectionId { get; private set; }
 
-    public string UserAgent { get; private set; }
+    // Properties
+    public string ConnectionId { get; private set; }
 
     public bool Connected { get; private set; }
 
 
+    // Modifier
+    public void SetConnected(bool connected) => this.Connected = connected;
+
+
     // Relationship
-    public virtual User User { get; private set; }
+    public Guid UserId { get; private set; }
+
+    public virtual User? User { get; private set; }
 }

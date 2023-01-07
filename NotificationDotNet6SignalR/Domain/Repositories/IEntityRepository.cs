@@ -11,6 +11,8 @@ public interface IEntityRepository<TEntity> : IDisposable where TEntity : Entity
 
     Task Delete(TEntity entity);
 
+    Task DeleteAll(IList<TEntity> entity);
+
     Task<TEntity> GetByIdAsync(Guid id);
 
     Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate);

@@ -9,11 +9,11 @@ public class UserLoginCommand : Notifiable<Notification>, ICommand
 {
     [Required(ErrorMessage = "O e-mail é obrigatório")]
     [EmailAddress(ErrorMessage = "E-mail inválido")]
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     [Required(ErrorMessage = "A senha é obrigatória")]
     [DataType(DataType.Password)]
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     public string? ReturnUrl { get; set; }
 

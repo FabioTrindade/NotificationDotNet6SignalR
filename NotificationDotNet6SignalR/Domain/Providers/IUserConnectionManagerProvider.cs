@@ -1,10 +1,12 @@
-﻿namespace NotificationDotNet6SignalR.Domain.Providers;
+﻿using NotificationDotNet6SignalR.Domain.Entities;
+
+namespace NotificationDotNet6SignalR.Domain.Providers;
 
 public interface IUserConnectionManagerProvider
 {
-    void KeepUserConnection(string userId, string connectionId);
+    Task<User> LogCurrentUser();
 
-    void RemoveUserConnection(string connectionId);
+    Task<ConnectionInfo> ConnectionCurrentUser();
 
-    List<string> GetUserConnections(string userId);
+    Task<HttpContext> GetContext();
 }

@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using NotificationDotNet6SignalR.Domain.Commands;
 using NotificationDotNet6SignalR.Domain.Commands.User;
 using NotificationDotNet6SignalR.Domain.Entities;
+using NotificationDotNet6SignalR.Domain.Providers;
 using NotificationDotNet6SignalR.Domain.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace NotificationDotNet6SignalR.Services
 {
@@ -12,15 +14,16 @@ namespace NotificationDotNet6SignalR.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
+        private readonly IUserConnectionManagerProvider _userConnectionManagerProvider;
+ 
         public UserService(UserManager<User> userManager
             , SignInManager<User> signInManager
-            , IHttpContextAccessor httpContextAccessor)
+            , IHttpContextAccessor httpContextAccessor
+            , IUserConnectionManagerProvider userConnectionManagerProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _httpContextAccessor = httpContextAccessor;
+            _userConnectionManagerProvider = userConnectionManagerProvider;
         }
 
         public async Task<GenericCommandResult> Handle(UserRegisterCommand command)
@@ -118,24 +121,15 @@ namespace NotificationDotNet6SignalR.Services
             // Set active for visible especific notifcation
             signedUser.SetActive(true);
 
+            // Salva as alterações realizadas
+            await _userManager.UpdateAsync(signedUser);
+
             return new GenericCommandResult(true, "", login);
         }
 
-        public async Task<User> LogCurrentUser()
-        {
-            var username = _httpContextAccessor.HttpContext.User;
-
-            var user = await _userManager.GetUserAsync(username);
-
-            return user;
-        }
-
-        public async Task<ConnectionInfo> ConnectionCurrentUser()
-            => _httpContextAccessor.HttpContext.Connection;
-
         public async Task<GenericCommandResult> GetUserActive()
         {
-            var user = await LogCurrentUser();
+            var user = await _userConnectionManagerProvider.LogCurrentUser();
 
             var users = await _userManager.Users
                                 .Where(w => w.Active == true && w.Id != user.Id)
@@ -149,9 +143,22 @@ namespace NotificationDotNet6SignalR.Services
             return new GenericCommandResult(true, "", result);
         }
 
-        public void Logout()
+        public async Task Logout()
         {
-            _signInManager.SignOutAsync();
+            // User logado
+            var user = await _userConnectionManagerProvider.LogCurrentUser();
+
+            // Verifica se o e-mail existe
+            var signedUser = await _userManager.FindByIdAsync(user.Id.ToString());
+
+            // Set inactive for visible especific notifcation
+            signedUser.SetActive(false);
+
+            // Salva as alterações realizadas
+            await _userManager.UpdateAsync(signedUser);
+
+            // Realiza o logout da aplicação
+            await _signInManager.SignOutAsync();
         }
     }
 }

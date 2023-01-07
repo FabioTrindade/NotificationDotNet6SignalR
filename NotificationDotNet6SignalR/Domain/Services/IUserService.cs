@@ -8,11 +8,7 @@ namespace NotificationDotNet6SignalR.Domain.Services;
 public interface IUserService : IService<UserRegisterCommand>,
     IService<UserLoginCommand>
 {
-    Task<User> LogCurrentUser();
-
-    Task<ConnectionInfo> ConnectionCurrentUser();
-
     Task<GenericCommandResult> GetUserActive();
 
-    void Logout();
+    Task Logout();
 }

@@ -13,16 +13,18 @@ public static class DependencyInjectionConfiguration
     {
 		services.AddTransient<IUserService, UserService>();
 		services.AddScoped<INotificationService, NotificationService>();
-	}
+		services.AddScoped<IConnectionService, ConnectionService>();
+    }
 
 	public static void SetConfigureScopedRepository(this IServiceCollection services)
 	{
 		services.AddScoped<IDapperRepository, DapperRepository>();
 		services.AddScoped<INotificationRepository, NotificationRepository>();
+		services.AddScoped<IConnectionRepository, ConnectionRepository>();
     }
 
 	public static void SetConfigureScopedProvider(this IServiceCollection services)
 	{
-		services.AddSingleton<IUserConnectionManagerProvider, UserConnectionManagerProvider>();
+		services.AddTransient<IUserConnectionManagerProvider, UserConnectionManagerProvider>();
 	}
 }

@@ -11,8 +11,8 @@ public record Notification : Entity
 
     public Notification(
         Guid fromId,
-        string header,
-        string content)
+        string? header,
+        string? content)
     {
         FromId = fromId;
         Header = header;
@@ -22,9 +22,9 @@ public record Notification : Entity
 
 
     // Properties
-    public string Header { get; private set; }
+    public string? Header { get; private set; }
 
-	public string Content { get; private set; }
+	public string? Content { get; private set; }
 
     public bool IsRead { get; private set; }
 
@@ -40,7 +40,7 @@ public record Notification : Entity
 
 
     // Relationship
-    public virtual User From { get; private set; }
+    public virtual User? From { get; private set; }
 
     public virtual User? To { get; private set; }
 }

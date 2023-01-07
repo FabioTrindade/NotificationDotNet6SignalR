@@ -15,7 +15,7 @@ public class DapperRepository : IDapperRepository
         _connection = new SqliteConnection(_configuration.GetConnectionString("NotificationConnection"));
     }
 
-    public async Task<List<T>> QueryAsync<T>(string query, object parameter = null)
+    public async Task<List<T>> QueryAsync<T>(string query, object parameter = null!)
     {
         var list = Activator.CreateInstance<List<T>>();
 

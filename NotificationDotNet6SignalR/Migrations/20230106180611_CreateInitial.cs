@@ -160,6 +160,29 @@ namespace NotificationDotNet6SignalR.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Connections",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ConnectionId = table.Column<string>(type: "TEXT", nullable: false),
+                    Connected = table.Column<bool>(type: "BIT", nullable: false, defaultValueSql: "1"),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
+                    Active = table.Column<bool>(type: "BIT", nullable: false, defaultValueSql: "1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("Pk_Connections_Id", x => x.Id);
+                    table.ForeignKey(
+                        name: "Fk_Con_User_Id",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Notifications",
                 columns: table => new
                 {
@@ -228,6 +251,11 @@ namespace NotificationDotNet6SignalR.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Connections_UserId",
+                table: "Connections",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Notifications_FromId",
                 table: "Notifications",
                 column: "FromId");
@@ -254,6 +282,9 @@ namespace NotificationDotNet6SignalR.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Connections");
 
             migrationBuilder.DropTable(
                 name: "Notifications");

@@ -32,18 +32,15 @@ public class UserController : Controller
             var user = await _userService.Handle(command);
 
             if (user.Success && (user.Data as IdentityResult).Succeeded)
-            {
                 return RedirectToAction("Index", "Home");
-            }
 
             if (user.Data is List<Flunt.Notifications.Notification>)
             {
                 var erros = (user.Data as List<Flunt.Notifications.Notification>);
 
                 foreach (var item in erros)
-                {
                     ModelState.AddModelError(item.Key, item.Message);
-                }
+                
             }
         }
 
@@ -68,13 +65,9 @@ public class UserController : Controller
             if (login.Success && (login.Data as Microsoft.AspNetCore.Identity.SignInResult).Succeeded)
             {
                 if (Url.IsLocalUrl(command.ReturnUrl))
-                {
                     return Redirect(command.ReturnUrl);
-                }
                 else
-                {
                     return RedirectToAction("Index", "Home");
-                }
             }
 
             if (login.Data is List<Flunt.Notifications.Notification>)
@@ -82,9 +75,7 @@ public class UserController : Controller
                 var erros = (login.Data as List<Flunt.Notifications.Notification>);
 
                 foreach (var item in erros)
-                {
                     ModelState.AddModelError(item.Key, item.Message);
-                }
             }
         }
 

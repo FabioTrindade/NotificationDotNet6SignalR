@@ -1,51 +1,33 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using NotificationDotNet6SignalR.Domain.Entities;
 using NotificationDotNet6SignalR.Domain.Providers;
 
 namespace NotificationDotNet6SignalR.Providers;
 
 public class UserConnectionManagerProvider : IUserConnectionManagerProvider
 {
-	private static readonly Dictionary<string, List<string>> _userConnectionMap = new Dictionary<string, List<string>>();
-	private static readonly string _userConnectionMapLocker = string.Empty;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly UserManager<User> _userManager;
 
-    public void KeepUserConnection(string userId, string connectionId)
+    public UserConnectionManagerProvider(IHttpContextAccessor httpContextAccessor
+        , UserManager<User> userManager)
     {
-        lock (_userConnectionMapLocker)
-        {
-            if (!_userConnectionMap.ContainsKey(userId))
-            {
-                _userConnectionMap[userId] = new List<string>();
-            }
-            _userConnectionMap[userId].Add(connectionId);
-        }
+        _httpContextAccessor = httpContextAccessor;
+        _userManager = userManager;
     }
 
-    public void RemoveUserConnection(string connectionId)
+    public async Task<User> LogCurrentUser()
     {
-        //This method will remove the connectionId of user 
-        lock (_userConnectionMapLocker)
-        {
-            foreach (var userId in _userConnectionMap.Keys)
-            {
-                if (_userConnectionMap.ContainsKey(userId))
-                {
-                    if (_userConnectionMap[userId].Contains(connectionId))
-                    {
-                        _userConnectionMap[userId].Remove(connectionId);
-                        break;
-                    }
-                }
-            }
-        }
+        var username = _httpContextAccessor?.HttpContext?.User;
+
+        var user = await _userManager.GetUserAsync(username);
+
+        return user;
     }
 
-    public List<string> GetUserConnections(string userId)
-    {
-        var conn = new List<string>();
-        lock (_userConnectionMapLocker)
-        {
-            conn = _userConnectionMap[userId];
-        }
-        return conn;
-    }
+    public async Task<ConnectionInfo> ConnectionCurrentUser()
+        => _httpContextAccessor?.HttpContext?.Connection;
+
+    public async Task<HttpContext> GetContext()
+        => _httpContextAccessor?.HttpContext;
 }

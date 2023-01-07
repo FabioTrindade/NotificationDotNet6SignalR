@@ -5,8 +5,7 @@ const userId = $('#UserId').val();
 console.log(`userId: ${userId}`);
 
 const connectionUser = new signalR.HubConnectionBuilder()
-    .withUrl(`/NotificationUserHub?userId=${userId}`)
-    .withAutomaticReconnect()
+    .withUrl(`/NotificationUser?userId=${userId}`)
     .build();
 
 connectionUser.on("sendToUser", (heading, content) => {
@@ -36,9 +35,6 @@ connectionUser.on("sendToUser", (heading, content) => {
     notifications.insertBefore(newItem, notifications.children[0]);
 });
 
-connectionUser.start().then(function () {
-    console.log('connection started');
-})
-.catch(error => {
-    console.error(error.message);
+connectionUser.start().catch(function (err) {
+    return console.error(err.toString());
 });

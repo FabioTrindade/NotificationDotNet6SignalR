@@ -143,6 +143,43 @@ namespace NotificationDotNet6SignalR.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("NotificationDotNet6SignalR.Domain.Entities.Connection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Active")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT")
+                        .HasDefaultValueSql("1");
+
+                    b.Property<bool>("Connected")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("BIT")
+                        .HasDefaultValueSql("1");
+
+                    b.Property<string>("ConnectionId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id")
+                        .HasName("Pk_Connections_Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Connections", (string)null);
+                });
+
             modelBuilder.Entity("NotificationDotNet6SignalR.Domain.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -324,6 +361,18 @@ namespace NotificationDotNet6SignalR.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NotificationDotNet6SignalR.Domain.Entities.Connection", b =>
+                {
+                    b.HasOne("NotificationDotNet6SignalR.Domain.Entities.User", "User")
+                        .WithMany("Connections")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("Fk_Con_User_Id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("NotificationDotNet6SignalR.Domain.Entities.Notification", b =>
                 {
                     b.HasOne("NotificationDotNet6SignalR.Domain.Entities.User", "From")
@@ -346,6 +395,8 @@ namespace NotificationDotNet6SignalR.Migrations
 
             modelBuilder.Entity("NotificationDotNet6SignalR.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Connections");
+
                     b.Navigation("NotificationsFrom");
 
                     b.Navigation("NotificationsTo");

@@ -1,16 +1,11 @@
-﻿using System.Reflection.PortableExecutable;
-using System.Threading;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using NotificationDotNet6SignalR.Domain.Commands;
 using NotificationDotNet6SignalR.Domain.Commands.Notifications;
-using NotificationDotNet6SignalR.Domain.DTOs.Notification;
 using NotificationDotNet6SignalR.Domain.Entities;
 using NotificationDotNet6SignalR.Domain.Providers;
 using NotificationDotNet6SignalR.Domain.Repositories;
 using NotificationDotNet6SignalR.Domain.Services;
 using NotificationDotNet6SignalR.Hubs;
-using NotificationDotNet6SignalR.Infra.Repositories;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace NotificationDotNet6SignalR.Services;
 
@@ -20,20 +15,20 @@ public class NotificationService : INotificationService
     private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
     private readonly IUserConnectionManagerProvider _userConnectionManagerProvider;
     private readonly INotificationRepository _notificationRepository;
-    private readonly IUserService _userService;
+    private readonly IConnectionService _connectionService;
 
     public NotificationService(
-        IHubContext<NotificationHub> notificationHubContext,
-        IHubContext<NotificationUserHub> notificationUserHubContext,
-        IUserConnectionManagerProvider userConnectionManagerProvider,
-        INotificationRepository notificationRepository,
-        IUserService userService)
+        IHubContext<NotificationHub> notificationHubContext
+        , IHubContext<NotificationUserHub> notificationUserHubContext
+        , IUserConnectionManagerProvider userConnectionManagerProvider
+        , INotificationRepository notificationRepository
+        , IConnectionService connectionService)
     {
         _notificationHubContext = notificationHubContext;
         _notificationUserHubContext = notificationUserHubContext;
         _userConnectionManagerProvider = userConnectionManagerProvider;
         _notificationRepository = notificationRepository;
-        _userService = userService;
+        _connectionService = connectionService;
     }
 
     public async Task<GenericCommandResult> Handle(NotificationCreateCommand command)
@@ -45,7 +40,7 @@ public class NotificationService : INotificationService
         if (!command.IsValid)
             return new GenericCommandResult(false, "", command.Notifications);
 
-        var user = await _userService.LogCurrentUser();
+        var user = await _userConnectionManagerProvider.LogCurrentUser();
 
         // Valida se o usuário do context existe
         if (user is null)
@@ -78,7 +73,7 @@ public class NotificationService : INotificationService
 
     public async Task<GenericCommandResult> GetNotificationByUserId()
     {
-        var user = await _userService.LogCurrentUser();
+        var user = await _userConnectionManagerProvider.LogCurrentUser();
 
         var result = await _notificationRepository.GetAllByUserId(user.Id);
 
@@ -114,13 +109,13 @@ public class NotificationService : INotificationService
     {
         if (notification.ToId is not null)
         {
-            var connections = _userConnectionManagerProvider.GetUserConnections(notification.ToId.ToString());
+            var connections = await _connectionService.GetConnectionsByUserId(notification.ToId);
 
-            if (connections != null && connections.Count > 0)
+            if (connections != null && connections.Connections.Count > 0)
             {
-                foreach (var connectionId in connections)
+                foreach (var connection in connections.Connections)
                 {
-                    await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", notification.Header, notification.Content);
+                    await _notificationUserHubContext.Clients.Client(connection.ConnectionId).SendAsync("sendToUser", notification.Header, notification.Content);
                 }
             }
         }

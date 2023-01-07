@@ -15,12 +15,11 @@ internal class ConnectionMapping : DbEntityConfiguration<Connection>
         entityBuilder.Property(t => t.UpdatedAt).HasColumnType("DATETIME");
         entityBuilder.Property(t => t.Active).IsRequired().HasColumnType("BIT").HasDefaultValueSql("1");
         entityBuilder.Property(t => t.ConnectionId).IsRequired().HasColumnType("TEXT");
-        entityBuilder.Property(t => t.UserAgent).IsRequired().HasColumnType("TEXT");
         entityBuilder.Property(t => t.Connected).IsRequired().HasColumnType("BIT").HasDefaultValueSql("1");
 
         entityBuilder.HasOne(s => s.User)
             .WithMany(c => c.Connections)
-            .HasForeignKey(fk => fk.Id)
+            .HasForeignKey(fk => fk.UserId)
             .HasConstraintName("Fk_Con_User_Id")
             .OnDelete(DeleteBehavior.Restrict);
     }
