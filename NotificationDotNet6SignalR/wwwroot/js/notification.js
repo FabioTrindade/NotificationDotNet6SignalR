@@ -12,7 +12,7 @@
                 showAlert('warning', 'Mensagem Retorno : ', retorno.data.message, () => { }, () => { });
                 return;
             }
-            toast('success', 'Notificação alterada com sucesso!');
+            toast('success', 'Notificação alterada com sucesso!', true);
         }, (err) => {
             showAlert('info', 'Ooops!', 'Verifique sua conexão e tente novamente', () => { });
         })

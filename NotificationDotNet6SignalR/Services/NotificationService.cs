@@ -12,20 +12,17 @@ namespace NotificationDotNet6SignalR.Services;
 public class NotificationService : INotificationService
 {
     private readonly IHubContext<NotificationHub> _notificationHubContext;
-    private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
     private readonly IUserConnectionManagerProvider _userConnectionManagerProvider;
     private readonly INotificationRepository _notificationRepository;
     private readonly IConnectionService _connectionService;
 
     public NotificationService(
         IHubContext<NotificationHub> notificationHubContext
-        , IHubContext<NotificationUserHub> notificationUserHubContext
         , IUserConnectionManagerProvider userConnectionManagerProvider
         , INotificationRepository notificationRepository
         , IConnectionService connectionService)
     {
         _notificationHubContext = notificationHubContext;
-        _notificationUserHubContext = notificationUserHubContext;
         _userConnectionManagerProvider = userConnectionManagerProvider;
         _notificationRepository = notificationRepository;
         _connectionService = connectionService;
@@ -115,11 +112,12 @@ public class NotificationService : INotificationService
             {
                 foreach (var connection in connections.Connections)
                 {
-                    await _notificationUserHubContext.Clients.Client(connection.ConnectionId).SendAsync("sendToUser", notification.Header, notification.Content);
+                    await _notificationHubContext.Clients.Client(connection.ConnectionId).SendAsync("sendToUser", notification.Header, notification.Content);
                 }
             }
         }
-        else {
+        else
+        {
             await _notificationHubContext.Clients.All.SendAsync("sendToUser", notification.Header, notification.Content);
         }
     }

@@ -1,35 +1,40 @@
-﻿//"use strict";
+﻿"use strict";
 
-//var connection = new signalR.HubConnectionBuilder().withUrl("/NotificationUserHub").build();
+const userId = $('#UserId').val();
 
-//connection.on("sendToUser", (heading, content) => {
+console.log(`userId: ${userId}`);
 
-//    // Atualiza o contador de mensagens
-//    const counterNotifier = document.querySelector(".ikrNoti_Counter").textContent;
-//    const newCounterNotifier = Number(counterNotifier) + 1;;
+const connectionUser = new signalR.HubConnectionBuilder()
+    .withUrl(`/NotificationHub?userId=${userId}`)
+    .build();
 
-//    document.querySelector(".ikrNoti_Counter").textContent = newCounterNotifier;
-//    document.querySelector(".notiCounterOnHead").textContent = newCounterNotifier;
+connectionUser.on("sendToUser", (heading, content) => {
+    console.log(`send to user especific`);
+    // Atualiza o contador de mensagens
+    const counterNotifier = document.querySelector(".ikrNoti_Counter").textContent;
+    const newCounterNotifier = Number(counterNotifier) + 1;;
 
-//    // Insere a nova notificação na lista
-//    const newItem = document.createElement("div");
-//    newItem.classList.add("krSingleNotiDiv", "ikrSingleNotiDivUnReadColor");
+    document.querySelector(".ikrNoti_Counter").textContent = newCounterNotifier;
+    document.querySelector(".notiCounterOnHead").textContent = newCounterNotifier;
 
-//    const item = `<div class="ikrSingleNotiDiv ikrSingleNotiDivUnReadColor" notiid="undefined">
-//                    <h4 class="ikrNotiFromPropName">undefined</h4>
-//                    <h5 class="ikrNotificationTitle">${heading}</h5>
-//                    <div class="ikrNotificationBody">${content}</div>
-//                    <div class="ikrNofiCreatedDate">undefined</div>
-//                </div>`
+    // Insere a nova notificação na lista
+    const newItem = document.createElement("div");
+    newItem.classList.add("krSingleNotiDiv", "ikrSingleNotiDivUnReadColor");
 
-//    newItem.innerHTML = item;
+    const item = `<div class="ikrSingleNotiDiv ikrSingleNotiDivUnReadColor" notiid="undefined">
+                    <h4 class="ikrNotiFromPropName">undefined</h4>
+                    <h5 class="ikrNotificationTitle">${heading}</h5>
+                    <div class="ikrNotificationBody">${content}</div>
+                    <div class="ikrNofiCreatedDate">undefined</div>
+                </div>`
 
-//    const notifications = document.querySelector(".ikrNotificationItems");
+    newItem.innerHTML = item;
 
-//    notifications.insertBefore(newItem, notifications.children[0]);
+    const notifications = document.querySelector(".ikrNotificationItems");
 
-//});
+    notifications.insertBefore(newItem, notifications.children[0]);
+});
 
-//connection.start().catch(function (err) {
-//    return console.error(err.toString());
-//});
+connectionUser.start().catch(function (err) {
+    return console.error(err.toString());
+});

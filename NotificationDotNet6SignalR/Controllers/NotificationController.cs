@@ -1,29 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using NotificationDotNet6SignalR.Domain.Commands.Notifications;
 using NotificationDotNet6SignalR.Domain.DTOs.Notification;
 using NotificationDotNet6SignalR.Domain.Providers;
 using NotificationDotNet6SignalR.Domain.Services;
-using NotificationDotNet6SignalR.Hubs;
 
 namespace NotificationDotNet6SignalR.Controllers;
 
 [Authorize]
 public class NotificationController : Controller
 {
-    private readonly IHubContext<NotificationHub> _notificationHubContext;
-    private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
     private readonly IUserConnectionManagerProvider _userConnectionManagerProvider;
     private readonly INotificationService _notificationService;
 
-    public NotificationController(IHubContext<NotificationHub> notificationHubContext,
-        IHubContext<NotificationUserHub> notificationUserHubContext,
-        IUserConnectionManagerProvider userConnectionManagerProvider,
-        INotificationService notificationService)
+    public NotificationController(IUserConnectionManagerProvider userConnectionManagerProvider
+        , INotificationService notificationService)
     {
-        _notificationHubContext = notificationHubContext;
-        _notificationUserHubContext = notificationUserHubContext;
         _userConnectionManagerProvider = userConnectionManagerProvider;
         _notificationService = notificationService;
     }

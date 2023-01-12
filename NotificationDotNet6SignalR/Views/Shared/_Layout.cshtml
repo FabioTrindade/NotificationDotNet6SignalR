@@ -22,88 +22,26 @@
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NotificationDotNet6SignalR</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        @if (signInManager)
-                        {
-                            @Html.Hidden("UserId", userManager.Id)
-                            <div id="notifications-container"></div>
-                        }
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                @Html.ActionLink("Home", "Index", "Home", "", htmlAttributes: new { @class = "nav-link text-dark" })
-                            </li>
-                            <li class="nav-item">
-                                @Html.ActionLink("Privacy", "Privacy", "Home", "", htmlAttributes: new { @class = "nav-link text-dark" })
-                            </li>
-                            @if (signInManager)
-                            {
-                                <li>
-                                    @Html.ActionLink("Notificação", "Index", "Notification", "", htmlAttributes: new { @class = "nav-link text-dark" })
-                                </li>
-                            }
-                        </ul>
-                        <ul class="navbar-nav ml-auto">
-                            @if (signInManager)
-                            {
-                                <li class="nav-item">
-                                    @using (Html.BeginForm("Logout", "User", FormMethod.Post))
-                                    {
-                                        <button type="submit" style="width:auto" class="nav-link btn btn-link py-0">
-                                            Logout @User.Identity.Name
-                                        </button>
-                                    }
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    @Html.ActionLink("Registrar", "Register", "User", "", htmlAttributes: new { @class = "nav-link text-dark" })
-                                </li>
-                                <li class="nav-item">
-                                    @Html.ActionLink("Login", "Login", "User", "", htmlAttributes: new { @class = "nav-link text-dark" })
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+            <partial name="_TopNavigation" model="@userManager" />
         </header>
         <div class="container">
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>
         </div>
-
         <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2022 - NotificationDotNet6SignalR - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
+            <partial name="_Footer" />
         </footer>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-        <script src="~/lib/signalr/dist/browser/signalr.js" asp-append-version="true"></script>
-        <script src="~/lib/select2/js/select2.full.min.js" asp-append-version="true"></script>
+
+        <partial name="_Scripts" />
+        <partial name="_ValidationScriptsPartial" />
+
         @if (signInManager)
         {
-            @*<script src="~/js/notification-hub.js" asp-append-version="true"></script>*@
-            <script src="~/js/user-notification-hub.js" asp-append-version="true"></script>
+            <script src="~/js/notification-hub.js" asp-append-version="true"></script>
         }
-        <script src="~/lib/notification/ikr.notification.js" asp-append-version="true"></script>
-        <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-        <script src="~/lib/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
-        <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+
         @await RenderSectionAsync("Scripts", required: false)
-        <partial name="_validationscriptspartial" />
     </body>
 </html>
 

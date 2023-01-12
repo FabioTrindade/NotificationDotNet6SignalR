@@ -10,8 +10,6 @@ $(document).ready(function () {
 // Auxiliar para ajustar parametros da requisição
 const transformRequestOptions = params => {
 
-    console.log(`transformRequestOptions: ${params}`);
-
     let options = '';
     let x = 0;
     let item;
@@ -30,7 +28,6 @@ const transformRequestOptions = params => {
             });
         }
     }
-    console.log(`options: ${options}`);
     return options ? options.slice(0, -1) : options;
 };
 
